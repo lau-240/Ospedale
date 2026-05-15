@@ -431,19 +431,32 @@ public class NewJFrame11 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        NewJFrame111 doctor = new NewJFrame111(user, users, hospitalizations,appointments);
+        long idDoctor = Long.parseLong(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
+        Doctor temp = null;
+        for(User use:this.users){
+            if(use.getId() == idDoctor)
+                temp =(Doctor) user;
+        }
+        NewJFrame111 doctor = new NewJFrame111(user,temp, users, hospitalizations,appointments);
         this.setVisible(false);
         doctor.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        
         NewJFrame login = new NewJFrame();
         this.setVisible(false);
         login.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        NewJFrame1 patient = new NewJFrame1(user,users,appointments,hospitalizations);
+        long idPatient = Long.parseLong(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
+        Patient temp = null;
+        for(User use:this.users){
+            if(use.getId() == idPatient)
+                temp =(Patient) user;
+        }
+        NewJFrame1 patient = new NewJFrame1(user,temp,users,appointments,hospitalizations);
         this.setVisible(false);
         patient.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed

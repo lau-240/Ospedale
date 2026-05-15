@@ -7,6 +7,7 @@ package packagee;
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -20,13 +21,15 @@ public class NewJFrame1 extends javax.swing.JFrame {
     private int x, y;
     private User user;
     private ArrayList<User> users;
+    private Patient patient;
     private ArrayList<Appointment> appointments;
     private ArrayList<Hospitalization> hospitalizations;
 
-    public NewJFrame1(User user, ArrayList<User> users, ArrayList<Appointment>appointments, ArrayList<Hospitalization> hospitalizations) {
+    public NewJFrame1(User user,Patient patient, ArrayList<User> users, ArrayList<Appointment>appointments, ArrayList<Hospitalization> hospitalizations) {
         initComponents();
         this.user = user;
         this.users = users;
+        this.patient = patient;
         this.hospitalizations = hospitalizations;
         this.appointments = appointments;
         if (user instanceof Administrator) {
@@ -509,6 +512,11 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jButton4.setText("Create");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jLabel24.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel24.setText("Cancel appointment");
@@ -850,6 +858,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton3ActionPerformed
 
+
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         Patient p = (Patient) user;
@@ -859,6 +868,23 @@ public class NewJFrame1 extends javax.swing.JFrame {
             model.addRow(new Object[]{a.getId(), a.getDatetime().toString(), a.getDoctor().getFirstname() + " " + a.getDoctor().getLastname(), a.getSpecialty().name(), a.isType() ? "In person" : "Virtual", a.getStatus().name()});
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        String hospitalizationReason = jTextArea3.getText();
+        long idDoctor = Long.parseLong(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
+        Doctor doc = null;
+        for(User use: this.users){
+            if (use.id  == idDoctor ){
+                doc = (Doctor) use;
+            }
+        }
+        LocalDate stimateDate = LocalDate.of(Integer.parseInt(jTextField16.getText().substring(0, 4)),Integer.parseInt(jTextField16.getText().substring(5, 7)), Integer.parseInt(jTextField16.getText().substring(8)));
+        
+        RoomType desireRoom = RoomType.valueOf(jComboBox3.getItemAt(jComboBox3.getSelectedIndex()).toUpperCase());
+        String observations = jTextArea1.getText();
+        this.hospitalizations.add(new Hospitalization(observations, this.patient, doc, stimateDate, observations, desireRoom, observations));
+    }//GEN-LAST:event_jButton4ActionPerformed
+
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

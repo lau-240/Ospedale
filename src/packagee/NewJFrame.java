@@ -426,12 +426,12 @@ public class NewJFrame extends javax.swing.JFrame {
                         admin.setVisible(true);
                     }
                     else if (selectedUser instanceof Doctor ) {
-                        NewJFrame111 doctor = new NewJFrame111(selectedUser,users,hospitalizations,appointments);
+                        NewJFrame111 doctor = new NewJFrame111(selectedUser,(Doctor)selectedUser,users,hospitalizations,appointments);
                         this.setVisible(false);
                         doctor.setVisible(true);
                     }
                     else {
-                        NewJFrame1 patient = new NewJFrame1(selectedUser,users,appointments, hospitalizations);
+                        NewJFrame1 patient = new NewJFrame1(selectedUser,(Patient) selectedUser,users,appointments, hospitalizations);
                         this.setVisible(false);
                         patient.setVisible(true);
                     }

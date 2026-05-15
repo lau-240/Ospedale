@@ -5,6 +5,7 @@
 package packagee;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 /**
  *
@@ -19,7 +20,28 @@ public class Appointment {
     private LocalDateTime datetime;
     private String reason;
     private boolean type;
+    private ArrayList<Prescription> prescriptions;
     private AppointmentStatus status;
+    private String diagnosis;
+    private String observations;
+    private String recommendedTreatment;
+    private String followUp;
+
+    public void setDiagnosis(String diagnosis) {
+        this.diagnosis = diagnosis;
+    }
+
+    public void setObservations(String observations) {
+        this.observations = observations;
+    }
+
+    public void setRecommendedTreatment(String recommendedTreatment) {
+        this.recommendedTreatment = recommendedTreatment;
+    }
+
+    public void setFollowUp(String followUp) {
+        this.followUp = followUp;
+    }
 
     public Appointment(String id, Patient patient, Doctor doctor, Specialty specialty, LocalDateTime datetime, String reason, boolean type) {
         this.id = id;
@@ -30,6 +52,7 @@ public class Appointment {
         this.reason = reason;
         this.type = type;
         this.status = AppointmentStatus.REQUESTED;
+        this.prescriptions = new ArrayList<>();
     }
 
     public void setStatus(AppointmentStatus status) {
@@ -62,6 +85,10 @@ public class Appointment {
 
     public Patient getPatient() {
         return patient;
+    }
+
+    public boolean addPrescription(Prescription prescrip) {
+        return this.prescriptions.add(prescrip);
     }
     
 }
