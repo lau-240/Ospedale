@@ -18,6 +18,26 @@ public class Patient extends User {
     private long phone;
     private String address;
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
+
+    public void setPhone(long phone) {
+        this.phone = phone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public Patient(long id, String username, String firstname, String lastname, String password, String email, LocalDate birthdate, boolean gender, long phone, String address) {
         super(id, username, firstname, lastname, password);
         this.email = email;

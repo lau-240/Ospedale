@@ -12,6 +12,22 @@ public abstract class User {
     
     protected final long id;
     protected String username;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
     protected String firstname;
     protected String lastname;
     protected String password;
