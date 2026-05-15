@@ -28,4 +28,16 @@ public class Doctor extends User {
     public boolean addHospitalization(Hospitalization hosp){
         return hospitalizations.add(hosp);
     }
+
+    public void setSpecialty(Specialty specialty) {
+        this.specialty = specialty;
+    }
+
+    public void setLicenceNumber(String licenceNumber) {
+        this.licenceNumber = licenceNumber;
+    }
+
+    public void setAssignedOffice(String assignedOffice) {
+        this.assignedOffice = assignedOffice;
+    }
 }

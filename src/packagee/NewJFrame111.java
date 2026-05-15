@@ -23,10 +23,12 @@ public class NewJFrame111 extends javax.swing.JFrame {
     private ArrayList<Hospitalization>hospitalizations;
     private ArrayList<Appointment>appointments;
     private Doctor doctor;
-    public NewJFrame111(User user, ArrayList<User> users,ArrayList<Hospitalization> hospitalizations,ArrayList<Appointment> appointments) {
+    private Patient patient;
+    public NewJFrame111(User user,Doctor doc, ArrayList<User> users,ArrayList<Hospitalization> hospitalizations,ArrayList<Appointment> appointments) {
         initComponents();
         this.user = user;
         this.users =users;
+        this.doctor = doc;
         this.hospitalizations = hospitalizations;
         this.appointments = appointments;
         if (user instanceof Administrator)
@@ -485,6 +487,11 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
         jButton3.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jButton3.setText("Accept");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jLabel15.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -543,6 +550,11 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
         jButton5.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jButton5.setText("Complete");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel25.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jLabel25.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -926,6 +938,11 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
         jButton10.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jButton10.setText("Prescribe");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
 
         jComboBox7.setFont(new java.awt.Font("Yu Gothic UI", 0, 18)); // NOI18N
         jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select one" }));
@@ -1060,7 +1077,29 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
+        String firstname = jTextField1.getText();
+        String lastname = jTextField2.getText();
+        String spec = jComboBox1.getItemAt(jComboBox1.getSelectedIndex());
+        String licenseNumber = jTextField6.getText();
+        String assignedOffice = jTextField8.getText();
+        String username = jTextField7.getText();
+        String password = jTextField9.getText();
+        String comPassword = jTextField10.getText();
+        Specialty specialty = Specialty.valueOf(spec.replaceAll(" &", "").replaceAll(" ", "_"));
+        if (password.equals(comPassword)) {
+            for(User doc: this.users){
+                if (doctor.getId() == doc.getId()) {
+                    doctor.setFirstname(firstname);
+                    doctor.setLastname(lastname);
+                    doctor.setPassword(password);
+                    doctor.setUsername(username);
+                    doctor.setAssignedOffice(assignedOffice);
+                    doctor.setLicenceNumber(licenseNumber);
+                    doctor.setSpecialty(specialty);
+                    
+                }
+            }
+        }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
@@ -1102,6 +1141,47 @@ public class NewJFrame111 extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String idAppointment = jComboBox2.getItemAt(jComboBox2.getSelectedIndex());
+        for(Appointment apo: this.appointments){
+            if(apo.getId() == idAppointment){
+                apo.setStatus(AppointmentStatus.PENDING);
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        String idAppointment = jComboBox4.getItemAt(jComboBox4.getSelectedIndex());
+        String diagnosis = jTextArea5.getText();
+        String observations = jTextArea6.getText();
+        String recommendedTrea = jTextArea7.getText();
+        String followUp = jTextArea8.getText();
+        for(Appointment apo: this.appointments){
+            if(apo.getId() == idAppointment){
+                apo.setStatus(AppointmentStatus.CANCELED);
+                apo.setDiagnosis(diagnosis);
+                apo.setFollowUp(followUp);
+                apo.setRecommendedTreatment(recommendedTrea);
+                apo.setObservations(observations);
+            }
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        String appointmentId = jComboBox7.getItemAt(jComboBox7.getSelectedIndex());
+        String medicationName = jTextField24.getText();
+        double dose = Double.parseDouble(jTextField25.getText());
+        String administrationRoute = jTextField26.getText();
+        int tratementduration = Integer.parseInt(jTextField28.getText());
+        String aditionalIformation = jTextField29.getText();
+        int frecuency = Integer.parseInt(jTextField27.getText());
+        for(Appointment apo: this.appointments){
+            if (apo.getId().equals(appointmentId)){
+                apo.addPrescription(new prescription(apo, medicationName, dose, administrationRoute, tratementduration, aditionalIformation, frecuency));
+            }
+        }
+    }//GEN-LAST:event_jButton10ActionPerformed
 
 
 

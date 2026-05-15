@@ -16,5 +16,18 @@ public class prescription {
     private int treatmentDuration;
     private String additionalInstructions;
     private int frecuency;
+
+    public prescription(Appointment appointment, String medicationName, double dose, String administrationRoute, int treatmentDuration, String additionalInstructions, int frecuency) {
+        this.appointment = appointment;
+        appointment.addPrescription(this);
+        this.medicationName = medicationName;
+        this.dose = dose;
+        this.administrationRoute = administrationRoute;
+        this.treatmentDuration = treatmentDuration;
+        this.additionalInstructions = additionalInstructions;
+        this.frecuency = frecuency;
+    }
+    
+    
     
 }
