@@ -4,6 +4,8 @@
  */
 package view;
 
+import controller.*;
+
 import model.*;
 import java.awt.Color;
 import java.time.LocalDate;
@@ -21,23 +23,32 @@ public class NewJFrame111 extends javax.swing.JFrame {
     private int x, y;
     private User user;
     private ArrayList<User> users;
-    private ArrayList<Hospitalization>hospitalizations;
-    private ArrayList<Appointment>appointments;
+    private ArrayList<Hospitalization> hospitalizations;
+    private ArrayList<Appointment> appointments;
     private Doctor doctor;
     private Patient patient;
-    public NewJFrame111(User user,Doctor doc, ArrayList<User> users,ArrayList<Hospitalization> hospitalizations,ArrayList<Appointment> appointments) {
+    private AppointmentController appointmentController;
+    private HospitalizationController hospitalizationController;
+    private DoctorController doctorController;
+
+    public NewJFrame111(User user, Doctor doc, ArrayList<User> users, ArrayList<Hospitalization> hospitalizations, ArrayList<Appointment> appointments) {
         initComponents();
         this.user = user;
-        this.users =users;
+        this.users = users;
         this.doctor = doc;
         this.hospitalizations = hospitalizations;
         this.appointments = appointments;
-        if (user instanceof Administrator)
+        if (user instanceof Administrator) {
             jButton11.setVisible(true);
-        else    
+        } else {
             jButton11.setVisible(false);
+        }
         this.setBackground(new Color(0, 0, 0, 0));
         this.setLocationRelativeTo(null);
+        this.appointmentController = new AppointmentController();
+        this.hospitalizationController = new HospitalizationController();
+        this.doctorController = new DoctorController();
+
     }
 
     /**
@@ -1130,28 +1141,15 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jRadioButton4ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        String firstname = jTextField1.getText();
-        String lastname = jTextField2.getText();
-        String spec = jComboBox1.getItemAt(jComboBox1.getSelectedIndex());
-        String licenseNumber = jTextField6.getText();
-        String assignedOffice = jTextField8.getText();
-        String username = jTextField7.getText();
-        String password = jTextField9.getText();
-        String comPassword = jTextField10.getText();
-        Specialty specialty = Specialty.valueOf(spec.replaceAll(" &", "").replaceAll(" ", "_"));
-        if (password.equals(comPassword)) {
-            for(User doc: this.users){
-                if (doctor.getId() == doc.getId()) {
-                    doctor.setFirstname(firstname);
-                    doctor.setLastname(lastname);
-                    doctor.setPassword(password);
-                    doctor.setUsername(username);
-                    doctor.setAssignedOffice(assignedOffice);
-                    doctor.setLicenceNumber(licenseNumber);
-                    doctor.setSpecialty(specialty);
-                    
-                }
-            }
+        Response response = doctorController.updateDoctor(
+                String.valueOf(doctor.getId()), jTextField1.getText(), jTextField2.getText(),
+                jTextField6.getText(), jTextField8.getText(), jTextField9.getText(),
+                jComboBox1.getSelectedItem().toString(), jTextField7.getText(), jTextField10.getText()
+        );
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
@@ -1162,14 +1160,14 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        NewJFrame11 admin = new NewJFrame11(user,users,hospitalizations, appointments);
+        NewJFrame11 admin = new NewJFrame11(user, users, hospitalizations, appointments);
         this.setVisible(false);
         admin.setVisible(true);
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         if (jRadioButton5.isSelected()) {
-            for(Hospitalization hosp : this.hospitalizations){
+            for (Hospitalization hosp : this.hospitalizations) {
                 if (jComboBox6.getItemAt(jComboBox6.getSelectedIndex()) == hosp.getId()) {
                     hosp.setStatus(HospitalizationStatus.CANCELED);
                 }
@@ -1179,7 +1177,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (jRadioButton6.isSelected()) {
-            for(User user: this.users){
+            for (User user : this.users) {
                 if (user instanceof Patient) {
                     if (jComboBox8.getItemAt(jComboBox8.getSelectedIndex()).equals(user.getId())) {
                         if (this.user instanceof Administrator) {
@@ -1187,7 +1185,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
                             String observations = jTextArea1.getText();
                             String entDate = jTextField21.getText();
                             LocalDate entryDate = LocalDate.of(Integer.parseInt(entDate.substring(0, 4)), Integer.parseInt(entDate.substring(5, 7)), Integer.parseInt(entDate.substring(8)));
-                            this.hospitalizations.add(new Hospitalization("asdfasdf", (Patient)user, this.doctor, LocalDate.MAX, reason, RoomType.IMC, observations, HospitalizationStatus.ONGOING));
+                            this.hospitalizations.add(new Hospitalization("asdfasdf", (Patient) user, this.doctor, LocalDate.MAX, reason, RoomType.IMC, observations, HospitalizationStatus.ONGOING));
                         }
                     }
                 }
@@ -1203,7 +1201,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
                 p = (Patient) u;
             }
         }
-        
+
         DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
         model.setRowCount(0);
         for (Appointment a : p.getAppointments()) {
@@ -1224,27 +1222,25 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         String idAppointment = jComboBox2.getItemAt(jComboBox2.getSelectedIndex());
-        for(Appointment apo: this.appointments){
-            if(apo.getId() == idAppointment){
-                apo.setStatus(AppointmentStatus.PENDING);
-            }
+        Response response = appointmentController.acceptAppointment(idAppointment);
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         String idAppointment = jComboBox4.getItemAt(jComboBox4.getSelectedIndex());
-        String diagnosis = jTextArea5.getText();
-        String observations = jTextArea6.getText();
-        String recommendedTrea = jTextArea7.getText();
-        String followUp = jTextArea8.getText();
-        for(Appointment apo: this.appointments){
-            if(apo.getId() == idAppointment){
-                apo.setStatus(AppointmentStatus.CANCELED);
-                apo.setDiagnosis(diagnosis);
-                apo.setFollowUp(followUp);
-                apo.setRecommendedTreatment(recommendedTrea);
-                apo.setObservations(observations);
-            }
+        Response response = appointmentController.completeAppointment(idAppointment);
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jTextArea5.setText("");
+            jTextArea6.setText("");
+            jTextArea7.setText("");
+            jTextArea8.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -1255,38 +1251,44 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        
         String appointmentId = jComboBox7.getItemAt(jComboBox7.getSelectedIndex());
-        String medicationName = jTextField24.getText();
-        double dose = Double.parseDouble(jTextField25.getText());
-        String administrationRoute = jTextField26.getText();
-        int tratementduration = Integer.parseInt(jTextField28.getText());
-        String aditionalIformation = jTextField29.getText();
-        int frecuency = Integer.parseInt(jTextField27.getText());
-        
-        model.addRow(new Object[]{appointmentId, medicationName, jTextField25.getText(), administrationRoute, "" + tratementduration, aditionalIformation, "" + frecuency});
-        for(Appointment apo: this.appointments){
-            if (apo.getId().equals(appointmentId)){
-                apo.addPrescription(new Prescription(apo, medicationName, dose, administrationRoute, tratementduration, aditionalIformation, frecuency));
+        try {
+            double dose = Double.parseDouble(jTextField25.getText());
+            int duration = Integer.parseInt(jTextField28.getText());
+            int frecuency = Integer.parseInt(jTextField27.getText());
+            Response response = appointmentController.prescribeMedication(
+                    appointmentId, jTextField24.getText(), dose,
+                    jTextField26.getText(), duration, jTextField29.getText(), frecuency
+            );
+            if (response.isSuccess()) {
+                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                jTextField24.setText("");
+                jTextField25.setText("");
+                jTextField26.setText("");
+                jTextField27.setText("");
+                jTextField28.setText("");
+                jTextField29.setText("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Dosis, duración y frecuencia deben ser números", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        String appointmentId = jComboBox3.getItemAt(jComboBox3.getSelectedIndex());
-        Appointment appointment = null;
-        for(Appointment apo: this.appointments){
-            if (apo.getId().equals(appointmentId)) {
-                appointment = apo;
-            }
+        String idAppointment = jComboBox3.getItemAt(jComboBox3.getSelectedIndex());
+        Response response = appointmentController.rescheduleAppointment(
+                idAppointment, jTextField13.getText(), jTextField14.getText()
+        );
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jTextField13.setText("");
+            jTextField14.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
-        appointment.getDatetime().with(LocalTime.of(Integer.parseInt(jTextField13.getText().substring(0, 2)),Integer.parseInt(jTextField13.getText().substring(3))));
-        String reasonChangeTime = jTextField14.getText();
-        appointment.setReason(reasonChangeTime);
     }//GEN-LAST:event_jButton4ActionPerformed
-
-
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
