@@ -4,6 +4,7 @@
  */
 package view;
 
+import controller.*;
 import model.*;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -17,10 +18,12 @@ public class NewJFrame11 extends javax.swing.JFrame {
 
     private int x, y;
     private ArrayList<User> users;
-    private ArrayList<Appointment>appointments;
-    private ArrayList<Hospitalization>hospitalizations;
+    private ArrayList<Appointment> appointments;
+    private ArrayList<Hospitalization> hospitalizations;
     private User user;
-    public NewJFrame11(User user, ArrayList<User>users,ArrayList<Hospitalization> hospitalizations, ArrayList<Appointment> appointments) {
+    private DoctorController doctorController;
+
+    public NewJFrame11(User user, ArrayList<User> users, ArrayList<Hospitalization> hospitalizations, ArrayList<Appointment> appointments) {
         initComponents();
         this.user = user;
         this.users = users;
@@ -28,6 +31,7 @@ public class NewJFrame11 extends javax.swing.JFrame {
         this.appointments = appointments;
         this.setBackground(new Color(0, 0, 0, 0));
         this.setLocationRelativeTo(null);
+        this.doctorController = new DoctorController();
     }
 
     /**
@@ -416,48 +420,64 @@ public class NewJFrame11 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        String firstname = jTextField3.getText();
-        String lastname = jTextField4.getText();
-        long id = Long.parseLong(jTextField5.getText());
         String spec = jComboBox1.getItemAt(jComboBox1.getSelectedIndex());
-        String licenseNumber = jTextField6.getText();
-        String assignedOffice = jTextField7.getText();
-        String username = jTextField8.getText();
-        String password = jTextField9.getText();
-        String comPassword = jTextField10.getText();
-        Specialty specialty = Specialty.valueOf(spec.replaceAll(" &", "").replaceAll(" ", "_"));
-        if (password.equals(comPassword)) {
-            users.add(new Doctor(id, username, firstname, lastname, password, specialty, licenseNumber, assignedOffice));
+        Response response = doctorController.registerDoctor(
+                jTextField5.getText(), jTextField8.getText(), jTextField3.getText(),
+                jTextField4.getText(), jTextField9.getText(), jTextField10.getText(),
+                spec, jTextField6.getText(), jTextField7.getText()
+        );
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+            jTextField6.setText("");
+            jTextField7.setText("");
+            jTextField8.setText("");
+            jTextField9.setText("");
+            jTextField10.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        long idDoctor = Long.parseLong(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
-        Doctor temp = null;
-        for(User use:this.users){
-            if(use.getId() == idDoctor)
-                temp =(Doctor) user;
+        String selected = jComboBox2.getItemAt(jComboBox2.getSelectedIndex());
+        if (selected == null || selected.equals("Select one")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un doctor", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        NewJFrame111 doctor = new NewJFrame111(user,temp, users, hospitalizations,appointments);
+        long idDoctor = Long.parseLong(selected);
+        User temp = DataStore.getInstance().findUserById(idDoctor);
+        if (temp == null || !(temp instanceof Doctor)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Doctor no encontrado", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        NewJFrame111 doctor = new NewJFrame111(user, (Doctor) temp, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
         this.setVisible(false);
         doctor.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        
+
         NewJFrame login = new NewJFrame();
         this.setVisible(false);
         login.setVisible(true);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        long idPatient = Long.parseLong(jComboBox2.getItemAt(jComboBox2.getSelectedIndex()));
-        Patient temp = null;
-        for(User use:this.users){
-            if(use.getId() == idPatient)
-                temp =(Patient) user;
+        String selected = jComboBox3.getItemAt(jComboBox3.getSelectedIndex());
+        if (selected == null || selected.equals("Select one")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un paciente", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
         }
-        NewJFrame1 patient = new NewJFrame1(user,temp,users,appointments,hospitalizations);
+        long idPatient = Long.parseLong(selected);
+        User temp = DataStore.getInstance().findUserById(idPatient);
+        if (temp == null || !(temp instanceof Patient)) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Paciente no encontrado", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        NewJFrame1 patient = new NewJFrame1(user, (Patient) temp, DataStore.getInstance().getUsers(), DataStore.getInstance().getAppointments(), DataStore.getInstance().getHospitalizations());
         this.setVisible(false);
         patient.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
