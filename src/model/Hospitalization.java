@@ -11,7 +11,7 @@ import java.time.LocalDate;
  * @author edangulo
  */
 public class Hospitalization {
-    
+
     private final String id;
     private Patient patient;
     private Doctor doctor;
@@ -41,6 +41,7 @@ public class Hospitalization {
         this.observations = observations;
         this.status = HospitalizationStatus.REQUESTED;
     }
+
     public Hospitalization(String id, Patient patient, Doctor doctor, LocalDate date, String reason, RoomType roomType, String observations, HospitalizationStatus hopsS) {
         this.id = id;
         this.patient = patient;
@@ -53,5 +54,25 @@ public class Hospitalization {
         this.observations = observations;
         this.status = hopsS;
     }
-    
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public Doctor getDoctor() {
+        return doctor;
+    }
+
+    public HospitalizationStatus getStatus() {
+        return status;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
 }
