@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package packagee;
+package model;
 
 /**
  *
@@ -10,7 +10,7 @@ package packagee;
  */
 public abstract class User {
     
-    protected final long id;
+    private final long id;
     protected String username;
 
     public void setUsername(String username) {
