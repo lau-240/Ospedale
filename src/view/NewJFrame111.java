@@ -83,11 +83,11 @@ public class NewJFrame111 extends javax.swing.JFrame {
             }
         }
 
-// Cargar pacientes en combobox de hospitalización
-        jComboBox6.addItem("Select one");
+// Cargar pacientes en jComboBox5
+        jComboBox5.addItem("Select one");
         for (User u : DataStore.getInstance().getUsers()) {
             if (u instanceof Patient) {
-                jComboBox6.addItem(String.valueOf(u.getId()));
+                jComboBox5.addItem(String.valueOf(u.getId()));
             }
         }
 
@@ -1170,14 +1170,15 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed
-        // TODO add your handling code here:
         jRadioButton3.setSelected(false);
-        Doctor d = (Doctor) user;
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-        for (Appointment a : d.getAppointments()) {
+        for (Appointment a : doctor.getAppointments()) {
             if (a.getStatus().equals(AppointmentStatus.PENDING)) {
-                model.addRow(new Object[]{a.getId(), a.getDatetime().toString(), a.getPatient().getFirstname() + " " + a.getDoctor().getLastname(), a.getSpecialty().name(), a.isType() ? "In person" : "Virtual", a.getStatus().name()});
+                model.addRow(new Object[]{a.getId(), a.getDatetime().toString(),
+                    a.getPatient().getFirstname() + " " + a.getPatient().getLastname(),
+                    a.getSpecialty().name(), a.isType() ? "In person" : "Virtual",
+                    a.getStatus().name()});
             }
         }
     }//GEN-LAST:event_jRadioButton4ActionPerformed
@@ -1254,11 +1255,13 @@ public class NewJFrame111 extends javax.swing.JFrame {
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
         // TODO add your handling code here:
         jRadioButton4.setSelected(false);
-        Doctor d = (Doctor) user;
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-        for (Appointment a : d.getAppointments()) {
-            model.addRow(new Object[]{a.getId(), a.getDatetime().toString(), a.getPatient().getFirstname() + " " + a.getDoctor().getLastname(), a.getSpecialty().name(), a.isType() ? "In-person" : "Remote", a.getStatus().name()});
+        for (Appointment a : doctor.getAppointments()) {
+            model.addRow(new Object[]{a.getId(), a.getDatetime().toString(),
+                a.getPatient().getFirstname() + " " + a.getPatient().getLastname(),
+                a.getSpecialty().name(), a.isType() ? "In-person" : "Remote",
+                a.getStatus().name()});
         }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
