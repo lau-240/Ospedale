@@ -25,7 +25,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private int x, y;
     private LoginController loginController;
     private PatientController patientController;
-    
+
     public NewJFrame() {
         initComponents();
         this.setBackground(new Color(0, 0, 0, 0));
@@ -34,7 +34,6 @@ public class NewJFrame extends javax.swing.JFrame {
         this.loginController = new LoginController();
         this.patientController = new PatientController();
 
-      
     }
 
     /**
@@ -419,7 +418,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        Response response = loginController.login(txtUsername.getText(), txtPassword.getText());
+        Response response = loginController.login(jTextField1.getText(), jTextField2.getText());
         if (!response.isSuccess()) {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
@@ -443,21 +442,27 @@ public class NewJFrame extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         Response response = patientController.registerPatient(
-        jTextField5.getText(), jTextField8.getText(), jTextField3.getText(),
-        jTextField4.getText(), jTextField9.getText(), txtUsername0.getText(),
-        jTextField7.getText(), txtUsername2.getText(),
-        jComboBox1.getSelectedItem().toString(),
-        jTextField6.getText(), txtUsername1.getText()
-    );
-    if (response.isSuccess()) {
-        javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-        jTextField3.setText(""); jTextField4.setText(""); jTextField5.setText("");
-        jTextField6.setText(""); jTextField7.setText(""); jTextField8.setText("");
-        jTextField9.setText(""); txtUsername0.setText(""); txtUsername1.setText("");
-        txtUsername2.setText("");
-    } else {
-        javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-    }
+                jTextField5.getText(), jTextField8.getText(), jTextField3.getText(),
+                jTextField4.getText(), jTextField9.getText(), jTextField10.getText(),
+                jTextField7.getText(), jTextField12.getText(),
+                jComboBox1.getSelectedItem().toString(),
+                jTextField6.getText(), jTextField11.getText()
+        );
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jTextField3.setText("");
+            jTextField4.setText("");
+            jTextField5.setText("");
+            jTextField6.setText("");
+            jTextField7.setText("");
+            jTextField8.setText("");
+            jTextField9.setText("");
+            jTextField10.setText("");
+            jTextField11.setText("");
+            jTextField12.setText("");
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
 
     }//GEN-LAST:event_jButton9ActionPerformed
 
