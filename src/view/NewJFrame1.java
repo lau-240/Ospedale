@@ -908,6 +908,11 @@ public class NewJFrame1 extends javax.swing.JFrame {
             jTextField12.setText("");
             jTextField13.setText("");
             jTextArea4.setText("");
+            jComboBox4.removeAllItems();
+            jComboBox4.addItem("Select one");
+            for (Appointment a : patient.getAppointments()) {
+                jComboBox4.addItem(a.getId());
+            }
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
@@ -915,16 +920,20 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        Response response = appointmentController.getPatientAppointments(patient.getId());
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        if (response.isSuccess()) {
-            Object[] data = (Object[]) response.getData();
-            for (Object row : data) {
-                model.addRow(new Object[]{row});
-            }
-        }
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    model.setRowCount(0);
+    ArrayList<Appointment> sorted = new ArrayList<>(patient.getAppointments());
+    sorted.sort((a, b) -> b.getDatetime().compareTo(a.getDatetime()));
+    for (Appointment a : sorted) {
+        model.addRow(new Object[]{
+            a.getId(),
+            a.getDatetime().toString(),
+            a.getDoctor().getFirstname() + " " + a.getDoctor().getLastname(),
+            a.getSpecialty().name(),
+            a.isType() ? "By Doctor" : "By Specialty",
+            a.getStatus().name()
+        });
+    }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

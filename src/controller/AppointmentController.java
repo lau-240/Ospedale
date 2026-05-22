@@ -163,35 +163,27 @@ public class AppointmentController {
     }
 
     public Response rescheduleAppointment(String appointmentId, String newTimeStr, String rescheduleReason) {
-        Appointment appointment = dataStore.findAppointmentById(appointmentId);
-        if (appointment == null) {
-            return new Response(404, "Cita no encontrada");
-        }
-        if (appointment.getStatus() == AppointmentStatus.COMPLETED
-                || appointment.getStatus() == AppointmentStatus.CANCELED) {
-            return new Response(400, "No se puede reagendar una cita completada o cancelada");
-        }
-        if (!newTimeStr.matches("([01]\\d|2[0-3]):(00|15|30|45)")) {
-            return new Response(400, "La hora debe seguir el formato hh:mm con minutos en 00, 15, 30 o 45");
-        }
-
-        LocalDate originalDate = appointment.getDatetime().toLocalDate();
-        LocalTime newTime = LocalTime.parse(newTimeStr, DateTimeFormatter.ofPattern("HH:mm"));
-        LocalDateTime newDatetime = LocalDateTime.of(originalDate, newTime);
-
-        if (!isDoctorAvailable(appointment.getDoctor(), newDatetime)) {
-            return new Response(409, "El doctor no tiene disponibilidad en ese horario");
-        }
-
-<<<<<<< HEAD
-        appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
-
-=======
->>>>>>> 9fe9d19a676b95ff646f1b9be2695dc7e3e4a9a3
-        appointment.setDatetime(newDatetime);
-        appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
-        return new Response(200, "Cita reagendada exitosamente");
+    Appointment appointment = dataStore.findAppointmentById(appointmentId);
+    if (appointment == null) {
+        return new Response(404, "Cita no encontrada");
     }
+    if (appointment.getStatus() == AppointmentStatus.COMPLETED || 
+        appointment.getStatus() == AppointmentStatus.CANCELED) {
+        return new Response(400, "No se puede reagendar una cita completada o cancelada");
+    }
+    if (!newTimeStr.matches("([01]\\d|2[0-3]):(00|15|30|45)")) {
+        return new Response(400, "La hora debe seguir el formato hh:mm con minutos en 00, 15, 30 o 45");
+    }
+    LocalDate originalDate = appointment.getDatetime().toLocalDate();
+    LocalTime newTime = LocalTime.parse(newTimeStr, DateTimeFormatter.ofPattern("HH:mm"));
+    LocalDateTime newDatetime = LocalDateTime.of(originalDate, newTime);
+    if (!isDoctorAvailable(appointment.getDoctor(), newDatetime)) {
+        return new Response(409, "El doctor no tiene disponibilidad en ese horario");
+    }
+    appointment.setDatetime(newDatetime);
+    appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
+    return new Response(200, "Cita reagendada exitosamente");
+}
     
 
 
