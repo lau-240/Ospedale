@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author edangulo
  */
 public class Doctor extends User {
-    
+
     private Specialty specialty;
     private String licenceNumber;
     private String assignedOffice;
@@ -25,7 +25,7 @@ public class Doctor extends User {
         this.specialty = specialty;
         this.licenceNumber = licenceNumber;
         this.assignedOffice = assignedOffice;
-       
+
     }
 
     public ArrayList<Appointment> getAppointments() {
@@ -35,8 +35,8 @@ public class Doctor extends User {
     public Specialty getSpecialty() {
         return specialty;
     }
-    
-    public boolean addHospitalization(Hospitalization hosp){
+
+    public boolean addHospitalization(Hospitalization hosp) {
         return hospitalizations.add(hosp);
     }
 
@@ -50,5 +50,9 @@ public class Doctor extends User {
 
     public void setAssignedOffice(String assignedOffice) {
         this.assignedOffice = assignedOffice;
+    }
+
+    public void addAppointment(Appointment a) {
+        this.appointments.add(a);
     }
 }
