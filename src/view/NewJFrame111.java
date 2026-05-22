@@ -49,6 +49,39 @@ public class NewJFrame111 extends javax.swing.JFrame {
         this.hospitalizationController = new HospitalizationController();
         this.doctorController = new DoctorController();
 
+        // Cargar info del doctor
+        jTextField1.setText(doctor.getUsername());
+        jTextField2.setText(doctor.getFirstname());
+        jTextField6.setText(doctor.getLastname());
+
+// Cargar especialidades
+        jComboBox1.addItem("Select one");
+        for (Specialty spec : Specialty.values()) {
+            jComboBox1.addItem(spec.toString().replaceAll("_", " "));
+        }
+
+// Cargar citas del doctor en comboboxes
+        jComboBox2.addItem("Select one");
+        jComboBox3.addItem("Select one");
+        jComboBox4.addItem("Select one");
+        jComboBox7.addItem("Select one");
+        for (Appointment a : DataStore.getInstance().getAppointments()) {
+            if (a.getDoctor().getId() == doctor.getId()) {
+                jComboBox2.addItem(a.getId());
+                jComboBox3.addItem(a.getId());
+                jComboBox4.addItem(a.getId());
+                jComboBox7.addItem(a.getId());
+            }
+        }
+
+// Cargar pacientes en combobox de hospitalización
+        jComboBox6.addItem("Select one");
+        for (User u : DataStore.getInstance().getUsers()) {
+            if (u instanceof Patient) {
+                jComboBox6.addItem(String.valueOf(u.getId()));
+            }
+        }
+
     }
 
     /**
