@@ -48,6 +48,11 @@ public class NewJFrame1 extends javax.swing.JFrame {
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.patientController = new PatientController();
+        // Cargar citas del paciente en combobox
+        jComboBox4.addItem("Select one");
+        for (Appointment a : patient.getAppointments()) {
+            jComboBox4.addItem(a.getId());
+        }
         jTextField1.setText(patient.getUsername());
         jTextField2.setText(patient.getFirstname());
         jTextField4.setText(patient.getLastname());
@@ -800,11 +805,16 @@ public class NewJFrame1 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        String idAppointment = jComboBox4.getItemAt(jComboBox4.getSelectedIndex());
-        for (Appointment ap : this.appointments) {
-            if (ap.getId().equals(idAppointment)) {
-                ap.setStatus(AppointmentStatus.CANCELED);
-            }
+        String appointmentId = jComboBox4.getItemAt(jComboBox4.getSelectedIndex());
+        if (appointmentId == null || appointmentId.equals("Select one")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una cita", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Response response = appointmentController.cancelAppointment(appointmentId);
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton5ActionPerformed
 

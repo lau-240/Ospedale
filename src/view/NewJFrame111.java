@@ -73,6 +73,15 @@ public class NewJFrame111 extends javax.swing.JFrame {
                 jComboBox7.addItem(a.getId());
             }
         }
+        // Cargar hospitalizaciones en comboboxes
+        jComboBox6.addItem("Select one");
+        jComboBox8.addItem("Select one");
+        for (Hospitalization h : DataStore.getInstance().getHospitalizations()) {
+            if (h.getDoctor().getId() == doctor.getId()) {
+                jComboBox6.addItem(h.getId());
+                jComboBox8.addItem(h.getId());
+            }
+        }
 
 // Cargar pacientes en combobox de hospitalización
         jComboBox6.addItem("Select one");
@@ -1199,30 +1208,30 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        if (jRadioButton5.isSelected()) {
-            for (Hospitalization hosp : this.hospitalizations) {
-                if (jComboBox6.getItemAt(jComboBox6.getSelectedIndex()) == hosp.getId()) {
-                    hosp.setStatus(HospitalizationStatus.CANCELED);
-                }
-            }
+        String hospitalizationId = jComboBox8.getItemAt(jComboBox8.getSelectedIndex());
+        if (hospitalizationId == null || hospitalizationId.equals("Select one")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una hospitalización", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Response response = hospitalizationController.cancelHospitalization(hospitalizationId);
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        if (jRadioButton6.isSelected()) {
-            for (User user : this.users) {
-                if (user instanceof Patient) {
-                    if (jComboBox8.getItemAt(jComboBox8.getSelectedIndex()).equals(user.getId())) {
-                        if (this.user instanceof Administrator) {
-                            String reason = jTextArea9.getText();
-                            String observations = jTextArea1.getText();
-                            String entDate = jTextField21.getText();
-                            LocalDate entryDate = LocalDate.of(Integer.parseInt(entDate.substring(0, 4)), Integer.parseInt(entDate.substring(5, 7)), Integer.parseInt(entDate.substring(8)));
-                            this.hospitalizations.add(new Hospitalization("asdfasdf", (Patient) user, this.doctor, LocalDate.MAX, reason, RoomType.IMC, observations, HospitalizationStatus.ONGOING));
-                        }
-                    }
-                }
-            }
+        String hospitalizationId = jComboBox6.getItemAt(jComboBox6.getSelectedIndex());
+        if (hospitalizationId == null || hospitalizationId.equals("Select one")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una hospitalización", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        Response response = hospitalizationController.approveHospitalization(hospitalizationId);
+        if (response.isSuccess()) {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton6ActionPerformed
 
