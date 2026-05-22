@@ -48,6 +48,23 @@ public class NewJFrame1 extends javax.swing.JFrame {
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.patientController = new PatientController();
+        jTextField1.setText(patient.getUsername());
+        jTextField2.setText(patient.getFirstname());
+        jTextField4.setText(patient.getLastname());
+
+// Cargar doctores en combobox de hospitalización
+        jComboBox2.addItem("Select one");
+        for (User u : DataStore.getInstance().getUsers()) {
+            if (u instanceof Doctor) {
+                jComboBox2.addItem(String.valueOf(u.getId()));
+            }
+        }
+
+// Cargar room types
+        jComboBox3.addItem("Select one");
+        for (RoomType rt : RoomType.values()) {
+            jComboBox3.addItem(rt.name());
+        }
     }
 
     /**
@@ -840,7 +857,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
         jComboBox5.addItem("Select one");
         for (User doc : this.users) {
             if (doc instanceof Doctor) {
-                jComboBox5.addItem(doc.getFirstname() + " " + doc.getLastname());
+                jComboBox5.addItem(String.valueOf(doc.getId()));
             }
         }
     }//GEN-LAST:event_jRadioButton4ActionPerformed

@@ -32,6 +32,27 @@ public class NewJFrame11 extends javax.swing.JFrame {
         this.setBackground(new Color(0, 0, 0, 0));
         this.setLocationRelativeTo(null);
         this.doctorController = new DoctorController();
+        // Cargar especialidades en combobox
+        jComboBox1.addItem("Select one");
+        for (Specialty spec : Specialty.values()) {
+            jComboBox1.addItem(spec.toString().replaceAll("_", " "));
+        }
+
+// Cargar doctores en combobox
+        jComboBox2.addItem("Select one");
+        for (User u : DataStore.getInstance().getUsers()) {
+            if (u instanceof Doctor) {
+                jComboBox2.addItem(String.valueOf(u.getId()));
+            }
+        }
+
+// Cargar pacientes en combobox
+        jComboBox3.addItem("Select one");
+        for (User u : DataStore.getInstance().getUsers()) {
+            if (u instanceof Patient) {
+                jComboBox3.addItem(String.valueOf(u.getId()));
+            }
+        }
     }
 
     /**
