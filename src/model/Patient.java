@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * @author edangulo
  */
 public class Patient extends User {
-    
+
     private String email;
     private LocalDate birthdate;
     private boolean gender;
@@ -48,7 +48,7 @@ public class Patient extends User {
     public ArrayList<Appointment> getAppointments() {
         return appointments;
     }
-    
+
     public void addAppointment(Appointment a) {
         this.appointments.add(a);
     }
@@ -62,5 +62,24 @@ public class Patient extends User {
         this.address = address;
         this.appointments = new ArrayList<>();
     }
-    
+
+    public String getEmail() {
+        return email;
+    }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public boolean isGender() {
+        return gender;
+    }
+
+    public long getPhone() {
+        return phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
 }

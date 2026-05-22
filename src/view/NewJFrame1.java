@@ -57,6 +57,12 @@ public class NewJFrame1 extends javax.swing.JFrame {
         jTextField2.setText(patient.getFirstname());
         jTextField4.setText(patient.getLastname());
 
+        jTextField6.setText(String.valueOf(patient.getId()));
+        jTextField7.setText(patient.getEmail());
+        jTextField10.setText(String.valueOf(patient.getPhone()));
+        jTextField11.setText(patient.getAddress());
+        jTextField6.setText(patient.getBirthdate().toString());
+
 // Cargar doctores en combobox de hospitalización
         jComboBox2.addItem("Select one");
         for (User u : DataStore.getInstance().getUsers()) {
