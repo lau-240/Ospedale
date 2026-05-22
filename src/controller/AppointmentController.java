@@ -183,13 +183,20 @@ public class AppointmentController {
             return new Response(409, "El doctor no tiene disponibilidad en ese horario");
         }
 
+<<<<<<< HEAD
         appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
 
+=======
+>>>>>>> 9fe9d19a676b95ff646f1b9be2695dc7e3e4a9a3
         appointment.setDatetime(newDatetime);
+        appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
         return new Response(200, "Cita reagendada exitosamente");
     }
+    
 
-    public Response prescribeMedication(String appointmentId, String medicationName,
+
+
+public Response prescribeMedication(String appointmentId, String medicationName,
             double dose, String adminRoute, int duration, String instructions, int frecuency) {
         Appointment appointment = dataStore.findAppointmentById(appointmentId);
         if (appointment == null) {
