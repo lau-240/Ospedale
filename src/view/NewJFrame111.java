@@ -1197,6 +1197,9 @@ public class NewJFrame111 extends javax.swing.JFrame {
         );
         if (response.isSuccess()) {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jTextField8.setText("");
+            jTextField9.setText("");
+            jTextField10.setText("");
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
