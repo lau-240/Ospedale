@@ -864,6 +864,11 @@ public class NewJFrame1 extends javax.swing.JFrame {
         for (Specialty spec : Specialty.values()) {
             jComboBox5.addItem(spec.toString().replaceAll("_", " & "));
         }
+        jComboBox4.removeAllItems();
+        jComboBox4.addItem("Select one");
+        for (Appointment a : patient.getAppointments()) {
+            jComboBox4.addItem(a.getId());
+        }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
     private void jRadioButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton4ActionPerformed

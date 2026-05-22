@@ -167,6 +167,10 @@ public class AppointmentController {
         if (appointment == null) {
             return new Response(404, "Cita no encontrada");
         }
+        if (appointment.getStatus() == AppointmentStatus.COMPLETED
+                || appointment.getStatus() == AppointmentStatus.CANCELED) {
+            return new Response(400, "No se puede reagendar una cita completada o cancelada");
+        }
         if (!newTimeStr.matches("([01]\\d|2[0-3]):(00|15|30|45)")) {
             return new Response(400, "La hora debe seguir el formato hh:mm con minutos en 00, 15, 30 o 45");
         }
@@ -179,13 +183,15 @@ public class AppointmentController {
             return new Response(409, "El doctor no tiene disponibilidad en ese horario");
         }
 
-        appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
-        
         appointment.setDatetime(newDatetime);
+        appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
         return new Response(200, "Cita reagendada exitosamente");
     }
+    
 
-    public Response prescribeMedication(String appointmentId, String medicationName,
+
+
+public Response prescribeMedication(String appointmentId, String medicationName,
             double dose, String adminRoute, int duration, String instructions, int frecuency) {
         Appointment appointment = dataStore.findAppointmentById(appointmentId);
         if (appointment == null) {
