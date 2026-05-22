@@ -180,6 +180,8 @@ public class AppointmentController {
         }
 
         appointment.setReason(appointment.getDatetime() + " - " + rescheduleReason);
+        
+        appointment.setDatetime(newDatetime);
         return new Response(200, "Cita reagendada exitosamente");
     }
 

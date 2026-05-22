@@ -6,7 +6,7 @@ package view;
 
 import controller.*;
 import model.*;
-import java.util.ArrayList;
+
 
 
 import java.awt.Color;
@@ -435,6 +435,8 @@ public class NewJFrame extends javax.swing.JFrame {
             doctor.setVisible(true);
         } else {
             NewJFrame1 patient = new NewJFrame1(selectedUser, (Patient) selectedUser, DataStore.getInstance().getUsers(), DataStore.getInstance().getAppointments(), DataStore.getInstance().getHospitalizations());
+            jTextField1.setText("");
+            jTextField2.setText("");
             this.setVisible(false);
             patient.setVisible(true);
         }
