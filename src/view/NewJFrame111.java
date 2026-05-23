@@ -48,6 +48,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.doctorController = new DoctorController();
+        reloadAppointmentComboBoxes();
 
         // Cargar info del doctor
         jTextField1.setText(doctor.getUsername());
@@ -96,7 +97,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
         for (RoomType rt : RoomType.values()) {
             jComboBox8.addItem(rt.name());
         }
-
+reloadAppointmentComboBoxes();
     }
 
     /**
@@ -1302,9 +1303,11 @@ public class NewJFrame111 extends javax.swing.JFrame {
         Response response = appointmentController.acceptAppointment(idAppointment);
         if (response.isSuccess()) {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            reloadAppointmentComboBoxes();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -1316,6 +1319,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
             jTextArea6.setText("");
             jTextArea7.setText("");
             jTextArea8.setText("");
+            reloadAppointmentComboBoxes();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
@@ -1362,11 +1366,29 @@ public class NewJFrame111 extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             jTextField13.setText("");
             jTextField14.setText("");
+            reloadAppointmentComboBoxes();
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton4ActionPerformed
-
+    private void reloadAppointmentComboBoxes() {
+        jComboBox2.removeAllItems();
+        jComboBox3.removeAllItems();
+        jComboBox4.removeAllItems();
+        jComboBox7.removeAllItems();
+        jComboBox2.addItem("Select one");
+        jComboBox3.addItem("Select one");
+        jComboBox4.addItem("Select one");
+        jComboBox7.addItem("Select one");
+        for (Appointment a : DataStore.getInstance().getAppointments()) {
+            if (a.getDoctor().getId() == doctor.getId()) {
+                jComboBox2.addItem(a.getId());
+                jComboBox3.addItem(a.getId());
+                jComboBox4.addItem(a.getId());
+                jComboBox7.addItem(a.getId());
+            }
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
