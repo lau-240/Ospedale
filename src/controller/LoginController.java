@@ -11,7 +11,7 @@ package controller;
 import model.User;
 
 public class LoginController {
-    private DataStore dataStore;
+    private IDataStore dataStore;
 
     public LoginController() {
         this.dataStore = DataStore.getInstance();

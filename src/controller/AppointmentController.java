@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class AppointmentController {
 
-    private DataStore dataStore;
+    private IDataStore dataStore;
 
     public AppointmentController() {
         this.dataStore = DataStore.getInstance();

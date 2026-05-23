@@ -8,7 +8,7 @@ import model.*;
 
 public class DoctorController {
 
-    private DataStore dataStore;
+    private IDataStore dataStore;
 
     public DoctorController() {
         this.dataStore = DataStore.getInstance();

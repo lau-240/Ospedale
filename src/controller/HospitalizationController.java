@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class HospitalizationController {
-    private DataStore dataStore;
+    private IDataStore dataStore;
 
     public HospitalizationController() {
         this.dataStore = DataStore.getInstance();

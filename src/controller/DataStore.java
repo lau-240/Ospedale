@@ -17,7 +17,7 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class DataStore implements Observable {
+public class DataStore implements Observable, IDataStore {
 
     private static DataStore instance;
     private ArrayList<User> users;
