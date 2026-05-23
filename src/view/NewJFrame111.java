@@ -1273,7 +1273,7 @@ public class NewJFrame111 extends javax.swing.JFrame implements controller.Obser
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         Patient p = null;
-        for (User u : this.users) {
+        for (User u : DataStore.getInstance().getUsers()) {
             if (u.getId() == Long.parseLong(jComboBox5.getItemAt(jComboBox5.getSelectedIndex()))) {
                 p = (Patient) u;
             }
