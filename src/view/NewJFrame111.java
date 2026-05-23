@@ -1406,7 +1406,9 @@ public class NewJFrame111 extends javax.swing.JFrame {
         jComboBox3.addItem("Select one");
         jComboBox4.addItem("Select one");
         jComboBox7.addItem("Select one");
+        
         for (Appointment a : DataStore.getInstance().getAppointments()) {
+            
             if (a.getDoctor().getId() == doctor.getId()) {
                 jComboBox2.addItem(a.getId());
                 jComboBox3.addItem(a.getId());
