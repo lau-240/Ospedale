@@ -45,6 +45,11 @@ public class NewJFrame111 extends javax.swing.JFrame {
         }
         this.setBackground(new Color(0, 0, 0, 0));
         this.setLocationRelativeTo(null);
+        this.setSize(1366, 768);
+        this.setLocation(0, 0);
+        java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+        this.setSize(screenSize.width, screenSize.height);
+        this.setResizable(true);
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.doctorController = new DoctorController();
@@ -56,7 +61,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
         // Cargar hospitalizaciones en comboboxes
         jComboBox6.addItem("Select one");
-        
+
         for (Hospitalization h : DataStore.getInstance().getHospitalizations()) {
             if (h.getDoctor().getId() == doctor.getId()) {
                 jComboBox6.addItem(h.getId());
@@ -1221,7 +1226,6 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         if (jRadioButton5.isSelected()) {
-            // Aprobar hospitalización existente
             String hospitalizationId = jComboBox6.getItemAt(jComboBox6.getSelectedIndex());
             if (hospitalizationId == null || hospitalizationId.equals("Select one")) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una hospitalización", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
@@ -1234,13 +1238,15 @@ public class NewJFrame111 extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         } else if (jRadioButton6.isSelected()) {
-            // Hospitalizar desde cita directamente
             String appointmentId = jComboBox6.getItemAt(jComboBox6.getSelectedIndex());
             if (appointmentId == null || appointmentId.equals("Select one")) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una cita", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 return;
             }
             String roomType = jComboBox8.getItemAt(jComboBox8.getSelectedIndex());
+            if (roomType == null || roomType.equals("Select one")) {
+                roomType = "STANDARD";
+            }
             Response response = hospitalizationController.hospitalizeFromAppointment(
                     appointmentId, doctor.getId(), jTextArea9.getText(), roomType, jTextArea1.getText()
             );
@@ -1429,6 +1435,16 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }
 
     private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        // Cargar citas PENDING en jComboBox6
+        jComboBox6.removeAllItems();
+        jComboBox6.addItem("Select one");
+        for (Appointment a : DataStore.getInstance().getAppointments()) {
+            if (a.getDoctor().getId() == doctor.getId()
+                    && a.getStatus() == AppointmentStatus.PENDING) {
+                jComboBox6.addItem(a.getId());
+            }
+        }
+        // Cargar RoomTypes en jComboBox8
         jComboBox8.removeAllItems();
         jComboBox8.addItem("Select one");
         for (RoomType rt : RoomType.values()) {
