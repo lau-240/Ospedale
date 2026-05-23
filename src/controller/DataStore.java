@@ -17,12 +17,13 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class DataStore {
+public class DataStore implements Observable {
 
     private static DataStore instance;
     private ArrayList<User> users;
     private ArrayList<Appointment> appointments;
     private ArrayList<Hospitalization> hospitalizations;
+    private ArrayList<Observer> observers = new ArrayList<>();
 
     private DataStore() {
         users = new ArrayList<>();
@@ -91,9 +92,28 @@ public class DataStore {
         }
     }
 
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer o : observers) {
+            o.update();
+        }
+    }
+
     public ArrayList<User> getUsers() {
         return users;
     }
+
+    
 
     public ArrayList<Appointment> getAppointments() {
         return appointments;
@@ -105,14 +125,17 @@ public class DataStore {
 
     public void addUser(User user) {
         users.add(user);
+        notifyObservers();
     }
 
     public void addAppointment(Appointment appointment) {
         appointments.add(appointment);
+        notifyObservers();
     }
 
     public void addHospitalization(Hospitalization hospitalization) {
         hospitalizations.add(hospitalization);
+        notifyObservers();
     }
 
     public User findUserByUsername(String username) {

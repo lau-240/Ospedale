@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author jjlora
  * @author edangulo
  */
-public class NewJFrame111 extends javax.swing.JFrame {
+public class NewJFrame111 extends javax.swing.JFrame implements controller.Observer {
 
     private int x, y;
     private User user;
@@ -53,6 +53,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.doctorController = new DoctorController();
+        DataStore.getInstance().addObserver(this);
 
         // Cargar info del doctor
         jTextField1.setText(doctor.getFirstname());
@@ -1456,6 +1457,24 @@ public class NewJFrame111 extends javax.swing.JFrame {
         jComboBox8.addItem("Select one");
         for (RoomType rt : RoomType.values()) {
             jComboBox8.addItem(rt.name());
+        }
+    }
+
+    @Override
+    public void update() {
+        reloadAppointmentComboBoxes();
+        // Actualizar tabla de citas del doctor
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        for (Appointment a : DataStore.getInstance().getAppointments()) {
+            if (a.getDoctor().getId() == doctor.getId()) {
+                model.addRow(new Object[]{
+                    a.getId(), a.getDatetime().toString(),
+                    a.getPatient().getFirstname() + " " + a.getPatient().getLastname(),
+                    a.getSpecialty().name(), a.isType() ? "By Doctor" : "By Specialty",
+                    a.getStatus().name()
+                });
+            }
         }
     }
 

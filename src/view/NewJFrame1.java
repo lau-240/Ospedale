@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  * @author jjlora
  * @author edangulo
  */
-public class NewJFrame1 extends javax.swing.JFrame {
+public class NewJFrame1 extends javax.swing.JFrame implements controller.Observer {
 
     private int x, y;
     private AppointmentController appointmentController;
@@ -48,6 +48,8 @@ public class NewJFrame1 extends javax.swing.JFrame {
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.patientController = new PatientController();
+
+        DataStore.getInstance().addObserver(this);
         // Cargar citas del paciente en combobox
         jComboBox4.addItem("Select one");
         for (Appointment a : patient.getAppointments()) {
@@ -979,6 +981,30 @@ public class NewJFrame1 extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    @Override
+    public void update() {
+        javax.swing.SwingUtilities.invokeLater(() -> {
+            jComboBox4.removeAllItems();
+            jComboBox4.addItem("Select one");
+            for (Appointment a : patient.getAppointments()) {
+                jComboBox4.addItem(a.getId());
+            }
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            java.util.ArrayList<Appointment> sorted = new java.util.ArrayList<>(patient.getAppointments());
+            sorted.sort((a, b) -> b.getDatetime().compareTo(a.getDatetime()));
+            for (Appointment a : sorted) {
+                model.addRow(new Object[]{
+                    a.getId(),
+                    a.getDatetime().toString(),
+                    a.getDoctor().getFirstname() + " " + a.getDoctor().getLastname(),
+                    a.getSpecialty().name(),
+                    a.isType() ? "By Doctor" : "By Specialty",
+                    a.getStatus().name()
+                });
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
