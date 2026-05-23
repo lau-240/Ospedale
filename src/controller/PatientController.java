@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 public class PatientController {
+
     private IDataStore dataStore;
 
     public PatientController() {
@@ -26,40 +27,49 @@ public class PatientController {
             String phoneStr, String address) {
 
         // Validar ID
-        if (idStr == null || idStr.isBlank())
+        if (idStr == null || idStr.isBlank()) {
             return new Response(400, "El ID no puede estar vacío");
+        }
         long id;
         try {
             id = Long.parseLong(idStr);
         } catch (NumberFormatException e) {
             return new Response(400, "El ID debe ser numérico");
         }
-        if (String.valueOf(id).length() != 12 || id <= 0)
+        if (String.valueOf(id).length() != 12 || id <= 0) {
             return new Response(400, "El ID debe tener exactamente 12 dígitos y ser mayor que 0");
+        }
 
         // Validar username
-        if (username == null || username.isBlank())
+        if (username == null || username.isBlank()) {
             return new Response(400, "El nombre de usuario no puede estar vacío");
+        }
 
         // Validar nombre y apellido
-        if (firstname == null || firstname.isBlank())
+        if (firstname == null || firstname.isBlank()) {
             return new Response(400, "El nombre no puede estar vacío");
-        if (lastname == null || lastname.isBlank())
+        }
+        if (lastname == null || lastname.isBlank()) {
             return new Response(400, "El apellido no puede estar vacío");
+        }
 
         // Validar contraseña
-        if (password == null || password.isBlank())
+        if (password == null || password.isBlank()) {
             return new Response(400, "La contraseña no puede estar vacía");
-        if (!password.equals(confirmPassword))
+        }
+        if (!password.equals(confirmPassword)) {
             return new Response(400, "Las contraseñas no coinciden");
+        }
 
         // Validar email
-        if (email == null || !email.matches("[^@]+@[^@]+\\.com"))
+        if (email == null || !email.matches("[^@]+@[^@]+\\.com")) {
             return new Response(400, "El email debe seguir el formato XXXXX@XXXXX.com");
+        }
 
         // Validar fecha de nacimiento
-        if (birthdateStr == null || birthdateStr.isBlank())
+        if (birthdateStr == null || birthdateStr.isBlank()) {
             return new Response(400, "La fecha de nacimiento no puede estar vacía");
+        }
         try {
             LocalDate.parse(birthdateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         } catch (DateTimeParseException e) {
@@ -67,12 +77,14 @@ public class PatientController {
         }
 
         // Validar teléfono
-        if (phoneStr == null || !phoneStr.matches("\\d{10}"))
+        if (phoneStr == null || !phoneStr.matches("\\d{10}")) {
             return new Response(400, "El teléfono debe tener exactamente 10 dígitos");
+        }
 
         // Validar dirección
-        if (address == null || address.isBlank())
+        if (address == null || address.isBlank()) {
             return new Response(400, "La dirección no puede estar vacía");
+        }
 
         return null; // sin errores
     }
@@ -84,14 +96,18 @@ public class PatientController {
 
         Response validation = validatePatientData(idStr, username, firstname, lastname,
                 password, confirmPassword, email, birthdateStr, genderStr, phoneStr, address);
-        if (validation != null) return validation;
+        if (validation != null) {
+            return validation;
+        }
 
         long id = Long.parseLong(idStr);
 
-        if (dataStore.findUserById(id) != null)
+        if (dataStore.findUserById(id) != null) {
             return new Response(409, "Ya existe un usuario con ese ID");
-        if (dataStore.findUserByUsername(username) != null)
+        }
+        if (dataStore.findUserByUsername(username) != null) {
             return new Response(409, "Ya existe un usuario con ese nombre de usuario");
+        }
 
         LocalDate birthdate = LocalDate.parse(birthdateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         boolean gender = genderStr.equalsIgnoreCase("M");
@@ -111,17 +127,21 @@ public class PatientController {
 
         Response validation = validatePatientData(idStr, username, firstname, lastname,
                 password, confirmPassword, email, birthdateStr, genderStr, phoneStr, address);
-        if (validation != null) return validation;
+        if (validation != null) {
+            return validation;
+        }
 
         long id = Long.parseLong(idStr);
         User user = dataStore.findUserById(id);
 
-        if (user == null || !(user instanceof Patient))
+        if (user == null || !(user instanceof Patient)) {
             return new Response(404, "Paciente no encontrado");
+        }
 
         User existingUsername = dataStore.findUserByUsername(username);
-        if (existingUsername != null && existingUsername.getId() != id)
+        if (existingUsername != null && existingUsername.getId() != id) {
             return new Response(409, "Ya existe un usuario con ese nombre de usuario");
+        }
 
         Patient patient = (Patient) user;
         patient.setUsername(username);
@@ -135,5 +155,24 @@ public class PatientController {
         patient.setAddress(address);
 
         return new Response(200, "Paciente actualizado exitosamente", id);
+    }
+
+    public PatientDTO getPatientDTO(long id) {
+        User user = dataStore.findUserById(id);
+        if (user == null || !(user instanceof Patient)) {
+            return null;
+        }
+        Patient patient = (Patient) user;
+        return new PatientDTO(
+                patient.getId(),
+                patient.getUsername(),
+                patient.getFirstname(),
+                patient.getLastname(),
+                patient.getEmail(),
+                patient.getBirthdate().toString(),
+                patient.isGender() ? "Male" : "Female",
+                String.valueOf(patient.getPhone()),
+                patient.getAddress()
+        );
     }
 }

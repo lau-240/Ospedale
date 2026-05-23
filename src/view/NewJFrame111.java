@@ -25,13 +25,13 @@ public class NewJFrame111 extends javax.swing.JFrame implements controller.Obser
     private ArrayList<User> users;
     private ArrayList<Hospitalization> hospitalizations;
     private ArrayList<Appointment> appointments;
-    private Doctor doctor;
+    private DoctorDTO doctor;
     private Patient patient;
     private AppointmentController appointmentController;
     private HospitalizationController hospitalizationController;
     private DoctorController doctorController;
 
-    public NewJFrame111(User user, Doctor doc, ArrayList<User> users, ArrayList<Hospitalization> hospitalizations, ArrayList<Appointment> appointments) {
+    public NewJFrame111(User user, DoctorDTO doc, ArrayList<User> users, ArrayList<Hospitalization> hospitalizations, ArrayList<Appointment> appointments) {
         initComponents();
         this.user = user;
         this.users = users;

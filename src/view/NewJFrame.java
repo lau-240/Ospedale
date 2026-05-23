@@ -7,13 +7,10 @@ package view;
 import controller.*;
 import model.*;
 
-
-
 import java.awt.Color;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-
 
 /**
  *
@@ -430,7 +427,9 @@ public class NewJFrame extends javax.swing.JFrame {
             this.setVisible(false);
             admin.setVisible(true);
         } else if (selectedUser instanceof Doctor) {
-            NewJFrame111 doctor = new NewJFrame111(selectedUser, (Doctor) selectedUser, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
+            DoctorController dc = new DoctorController();
+            DoctorDTO doctorDTO = dc.getDoctorDTO(selectedUser.getId());
+            NewJFrame111 doctor = new NewJFrame111(selectedUser, doctorDTO, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
             this.setVisible(false);
             doctor.setVisible(true);
         } else {
@@ -475,7 +474,6 @@ public class NewJFrame extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

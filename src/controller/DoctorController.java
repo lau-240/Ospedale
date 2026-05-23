@@ -17,11 +17,21 @@ public class DoctorController {
     private Specialty parseSpecialty(String specialty) {
         String specStr;
         switch (specialty) {
-            case "Gynecology & Obstetrics": specStr = "GYNECOLOGY_OBSTETRICS"; break;
-            case "Traumatology & Orthopedics": specStr = "TRAUMATOLOGY_ORTHOPEDICS"; break;
-            case "General Medicine": specStr = "GENERAL_MEDICINE"; break;
-            case "Internal Medicine": specStr = "INTERNAL_MEDICINE"; break;
-            default: specStr = specialty.toUpperCase().replaceAll(" ", "_"); break;
+            case "Gynecology & Obstetrics":
+                specStr = "GYNECOLOGY_OBSTETRICS";
+                break;
+            case "Traumatology & Orthopedics":
+                specStr = "TRAUMATOLOGY_ORTHOPEDICS";
+                break;
+            case "General Medicine":
+                specStr = "GENERAL_MEDICINE";
+                break;
+            case "Internal Medicine":
+                specStr = "INTERNAL_MEDICINE";
+                break;
+            default:
+                specStr = specialty.toUpperCase().replaceAll(" ", "_");
+                break;
         }
         return Specialty.valueOf(specStr);
     }
@@ -30,32 +40,42 @@ public class DoctorController {
             String lastname, String password, String confirmPassword,
             String specialty, String licenceNumber, String assignedOffice) {
 
-        if (idStr == null || idStr.isBlank())
+        if (idStr == null || idStr.isBlank()) {
             return new Response(400, "El ID no puede estar vacío");
+        }
         long id;
         try {
             id = Long.parseLong(idStr);
         } catch (NumberFormatException e) {
             return new Response(400, "El ID debe ser numérico");
         }
-        if (String.valueOf(id).length() != 12 || id <= 0)
+        if (String.valueOf(id).length() != 12 || id <= 0) {
             return new Response(400, "El ID debe tener exactamente 12 dígitos y ser mayor que 0");
-        if (username == null || username.isBlank())
+        }
+        if (username == null || username.isBlank()) {
             return new Response(400, "El nombre de usuario no puede estar vacío");
-        if (firstname == null || firstname.isBlank())
+        }
+        if (firstname == null || firstname.isBlank()) {
             return new Response(400, "El nombre no puede estar vacío");
-        if (lastname == null || lastname.isBlank())
+        }
+        if (lastname == null || lastname.isBlank()) {
             return new Response(400, "El apellido no puede estar vacío");
-        if (password == null || password.isBlank())
+        }
+        if (password == null || password.isBlank()) {
             return new Response(400, "La contraseña no puede estar vacía");
-        if (!password.equals(confirmPassword))
+        }
+        if (!password.equals(confirmPassword)) {
             return new Response(400, "Las contraseñas no coinciden");
-        if (licenceNumber == null || !licenceNumber.matches("L-\\d{10} MTL"))
+        }
+        if (licenceNumber == null || !licenceNumber.matches("L-\\d{10} MTL")) {
             return new Response(400, "El número de licencia debe seguir el formato L-XXXXXXXXXX MTL");
-        if (assignedOffice == null || !assignedOffice.matches("O-\\d{3}"))
+        }
+        if (assignedOffice == null || !assignedOffice.matches("O-\\d{3}")) {
             return new Response(400, "La oficina debe seguir el formato O-XXX");
-        if (specialty == null || specialty.isBlank() || specialty.equals("Select one"))
+        }
+        if (specialty == null || specialty.isBlank() || specialty.equals("Select one")) {
             return new Response(400, "La especialidad no puede estar vacía");
+        }
         try {
             parseSpecialty(specialty);
         } catch (IllegalArgumentException e) {
@@ -70,13 +90,17 @@ public class DoctorController {
 
         Response validation = validateDoctorData(idStr, username, firstname, lastname,
                 password, confirmPassword, specialty, licenceNumber, assignedOffice);
-        if (validation != null) return validation;
+        if (validation != null) {
+            return validation;
+        }
 
         long id = Long.parseLong(idStr);
-        if (dataStore.findUserById(id) != null)
+        if (dataStore.findUserById(id) != null) {
             return new Response(409, "Ya existe un usuario con ese ID");
-        if (dataStore.findUserByUsername(username) != null)
+        }
+        if (dataStore.findUserByUsername(username) != null) {
             return new Response(409, "Ya existe un usuario con ese nombre de usuario");
+        }
 
         Specialty spec = parseSpecialty(specialty);
         Doctor doctor = new Doctor(id, username, firstname, lastname, password,
@@ -91,16 +115,20 @@ public class DoctorController {
 
         Response validation = validateDoctorData(idStr, username, firstname, lastname,
                 password, confirmPassword, specialty, licenceNumber, assignedOffice);
-        if (validation != null) return validation;
+        if (validation != null) {
+            return validation;
+        }
 
         long id = Long.parseLong(idStr);
         User user = dataStore.findUserById(id);
-        if (user == null || !(user instanceof Doctor))
+        if (user == null || !(user instanceof Doctor)) {
             return new Response(404, "Doctor no encontrado");
+        }
 
         User existingUsername = dataStore.findUserByUsername(username);
-        if (existingUsername != null && existingUsername.getId() != id)
+        if (existingUsername != null && existingUsername.getId() != id) {
             return new Response(409, "Ya existe un usuario con ese nombre de usuario");
+        }
 
         Specialty spec = parseSpecialty(specialty);
         Doctor doctor = (Doctor) user;
@@ -112,5 +140,22 @@ public class DoctorController {
         doctor.setLicenceNumber(licenceNumber);
         doctor.setAssignedOffice(assignedOffice);
         return new Response(200, "Doctor actualizado exitosamente", id);
+    }
+
+    public DoctorDTO getDoctorDTO(long id) {
+        User user = dataStore.findUserById(id);
+        if (user == null || !(user instanceof Doctor)) {
+            return null;
+        }
+        Doctor doctor = (Doctor) user;
+        return new DoctorDTO(
+                doctor.getId(),
+                doctor.getUsername(),
+                doctor.getFirstname(),
+                doctor.getLastname(),
+                doctor.getSpecialty().name(),
+                doctor.getLicenceNumber(),
+                doctor.getAssignedOffice()
+        );
     }
 }
