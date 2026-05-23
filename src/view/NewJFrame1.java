@@ -862,7 +862,7 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
         jComboBox5.addItem("Select one");
         for (Specialty spec : Specialty.values()) {
-            jComboBox5.addItem(spec.toString().replaceAll("_", " & "));
+            jComboBox5.addItem(spec.toString().replaceAll("_", " "));
         }
         jComboBox4.removeAllItems();
         jComboBox4.addItem("Select one");
@@ -920,20 +920,20 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-    model.setRowCount(0);
-    ArrayList<Appointment> sorted = new ArrayList<>(patient.getAppointments());
-    sorted.sort((a, b) -> b.getDatetime().compareTo(a.getDatetime()));
-    for (Appointment a : sorted) {
-        model.addRow(new Object[]{
-            a.getId(),
-            a.getDatetime().toString(),
-            a.getDoctor().getFirstname() + " " + a.getDoctor().getLastname(),
-            a.getSpecialty().name(),
-            a.isType() ? "By Doctor" : "By Specialty",
-            a.getStatus().name()
-        });
-    }
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        ArrayList<Appointment> sorted = new ArrayList<>(patient.getAppointments());
+        sorted.sort((a, b) -> b.getDatetime().compareTo(a.getDatetime()));
+        for (Appointment a : sorted) {
+            model.addRow(new Object[]{
+                a.getId(),
+                a.getDatetime().toString(),
+                a.getDoctor().getFirstname() + " " + a.getDoctor().getLastname(),
+                a.getSpecialty().name(),
+                a.isType() ? "By Doctor" : "By Specialty",
+                a.getStatus().name()
+            });
+        }
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

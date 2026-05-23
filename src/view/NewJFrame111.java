@@ -48,7 +48,6 @@ public class NewJFrame111 extends javax.swing.JFrame {
         this.appointmentController = new AppointmentController();
         this.hospitalizationController = new HospitalizationController();
         this.doctorController = new DoctorController();
-        reloadAppointmentComboBoxes();
 
         // Cargar info del doctor
         jTextField1.setText(doctor.getUsername());
@@ -61,19 +60,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
             jComboBox1.addItem(spec.toString().replaceAll("_", " "));
         }
 
-// Cargar citas del doctor en comboboxes
-        jComboBox2.addItem("Select one");
-        jComboBox3.addItem("Select one");
-        jComboBox4.addItem("Select one");
-        jComboBox7.addItem("Select one");
-        for (Appointment a : DataStore.getInstance().getAppointments()) {
-            if (a.getDoctor().getId() == doctor.getId()) {
-                jComboBox2.addItem(a.getId());
-                jComboBox3.addItem(a.getId());
-                jComboBox4.addItem(a.getId());
-                jComboBox7.addItem(a.getId());
-            }
-        }
+
         // Cargar hospitalizaciones en comboboxes
         jComboBox6.addItem("Select one");
         jComboBox8.addItem("Select one");
@@ -97,7 +84,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
         for (RoomType rt : RoomType.values()) {
             jComboBox8.addItem(rt.name());
         }
-reloadAppointmentComboBoxes();
+        reloadAppointmentComboBoxes();
     }
 
     /**
@@ -1180,12 +1167,14 @@ reloadAppointmentComboBoxes();
         jRadioButton3.setSelected(false);
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-        for (Appointment a : doctor.getAppointments()) {
-            if (a.getStatus().equals(AppointmentStatus.PENDING)) {
-                model.addRow(new Object[]{a.getId(), a.getDatetime().toString(),
+        for (Appointment a : DataStore.getInstance().getAppointments()) {
+            if (a.getDoctor().getId() == doctor.getId() && a.getStatus() == AppointmentStatus.PENDING) {
+                model.addRow(new Object[]{
+                    a.getId(), a.getDatetime().toString(),
                     a.getPatient().getFirstname() + " " + a.getPatient().getLastname(),
-                    a.getSpecialty().name(), a.isType() ? "In person" : "Virtual",
-                    a.getStatus().name()});
+                    a.getSpecialty().name(), a.isType() ? "By Doctor" : "By Specialty",
+                    a.getStatus().name()
+                });
             }
         }
     }//GEN-LAST:event_jRadioButton4ActionPerformed
@@ -1286,15 +1275,18 @@ reloadAppointmentComboBoxes();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
-        // TODO add your handling code here:
         jRadioButton4.setSelected(false);
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         model.setRowCount(0);
-        for (Appointment a : doctor.getAppointments()) {
-            model.addRow(new Object[]{a.getId(), a.getDatetime().toString(),
-                a.getPatient().getFirstname() + " " + a.getPatient().getLastname(),
-                a.getSpecialty().name(), a.isType() ? "In-person" : "Remote",
-                a.getStatus().name()});
+        for (Appointment a : DataStore.getInstance().getAppointments()) {
+            if (a.getDoctor().getId() == doctor.getId()) {
+                model.addRow(new Object[]{
+                    a.getId(), a.getDatetime().toString(),
+                    a.getPatient().getFirstname() + " " + a.getPatient().getLastname(),
+                    a.getSpecialty().name(), a.isType() ? "By Doctor" : "By Specialty",
+                    a.getStatus().name()
+                });
+            }
         }
     }//GEN-LAST:event_jRadioButton3ActionPerformed
 
@@ -1326,8 +1318,30 @@ reloadAppointmentComboBoxes();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
+        String appointmentId = jComboBox7.getItemAt(jComboBox7.getSelectedIndex());
+        try {
+            double dose = Double.parseDouble(jTextField25.getText());
+            int duration = Integer.parseInt(jTextField28.getText());
+            int frecuency = Integer.parseInt(jTextField27.getText());
+            Response response = appointmentController.prescribeMedication(
+                    appointmentId, jTextField24.getText(), dose,
+                    jTextField26.getText(), duration, jTextField29.getText(), frecuency
+            );
+            if (response.isSuccess()) {
+                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                jTextField24.setText("");
+                jTextField25.setText("");
+                jTextField26.setText("");
+                jTextField27.setText("");
+                jTextField28.setText("");
+                jTextField29.setText("");
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Dosis, duración y frecuencia deben ser números", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

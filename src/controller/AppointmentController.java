@@ -100,7 +100,11 @@ public class AppointmentController {
             }
         } else {
             try {
-                specialty = Specialty.valueOf(specialtyStr.toUpperCase().replaceAll(" & ", "_").replaceAll(" ", "_"));
+                String specStr = specialtyStr.toUpperCase()
+                        .replaceAll(" & ", "_")
+                        .replaceAll("&", "_")
+                        .replaceAll(" ", "_");
+                specialty = Specialty.valueOf(specStr);
             } catch (IllegalArgumentException e) {
                 return new Response(400, "Especialidad no válida");
             }
