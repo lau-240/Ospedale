@@ -53,15 +53,13 @@ public class NewJFrame1 extends javax.swing.JFrame {
         for (Appointment a : patient.getAppointments()) {
             jComboBox4.addItem(a.getId());
         }
-        jTextField1.setText(patient.getUsername());
-        jTextField2.setText(patient.getFirstname());
-        jTextField4.setText(patient.getLastname());
-
-        jTextField6.setText(String.valueOf(patient.getId()));
-        jTextField7.setText(patient.getEmail());
-        jTextField10.setText(String.valueOf(patient.getPhone()));
-        jTextField11.setText(patient.getAddress());
-        jTextField6.setText(patient.getBirthdate().toString());
+        jTextField1.setText(patient.getFirstname());   // Firstname
+        jTextField2.setText(patient.getLastname());    // Lastname
+        jTextField4.setText(patient.getBirthdate().toString()); // Birthdate
+        jTextField6.setText(patient.getEmail());       // Email
+        jTextField7.setText(patient.getPhone() + "");  // Phone
+        jTextField8.setText(patient.getAddress());     // Address
+        jTextField11.setText(patient.getUsername());   // User
 
 // Cargar doctores en combobox de hospitalización
         jComboBox2.addItem("Select one");
@@ -826,16 +824,22 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         Response response = patientController.updatePatient(
-                String.valueOf(patient.getId()), jTextField1.getText(), jTextField2.getText(),
-                jTextField4.getText(), jTextField8.getText(), jTextField9.getText(),
-                jTextField7.getText(), jTextField6.getText(),
-                jComboBox6.getSelectedItem().toString(),
-                jTextField10.getText(), jTextField11.getText()
+                String.valueOf(patient.getId()),
+                jTextField11.getText(), // username
+                jTextField1.getText(), // firstname
+                jTextField2.getText(), // lastname
+                jTextField9.getText(), // password
+                jTextField10.getText(), // confirmPassword
+                jTextField6.getText(), // email
+                jTextField4.getText(), // birthdate
+                jComboBox6.getSelectedItem().toString(), // gender
+                jTextField7.getText(), // phone
+                jTextField8.getText() // address
         );
         if (response.isSuccess()) {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            jTextField8.setText("");
             jTextField9.setText("");
+            jTextField10.setText("");
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
