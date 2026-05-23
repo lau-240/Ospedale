@@ -22,22 +22,20 @@ public class NewJFrame111 extends javax.swing.JFrame implements controller.Obser
 
     private int x, y;
     private User user;
-    private ArrayList<User> users;
-    private ArrayList<Hospitalization> hospitalizations;
-    private ArrayList<Appointment> appointments;
+    
+   
     private DoctorDTO doctor;
-    private Patient patient;
+
     private AppointmentController appointmentController;
     private HospitalizationController hospitalizationController;
     private DoctorController doctorController;
 
-    public NewJFrame111(User user, DoctorDTO doc, ArrayList<User> users, ArrayList<Hospitalization> hospitalizations, ArrayList<Appointment> appointments) {
+    public NewJFrame111(User user, DoctorDTO doc) {
         initComponents();
         this.user = user;
-        this.users = users;
+        
         this.doctor = doc;
-        this.hospitalizations = hospitalizations;
-        this.appointments = appointments;
+        
         if (user instanceof Administrator) {
             jButton11.setVisible(true);
         } else {
@@ -1213,7 +1211,7 @@ public class NewJFrame111 extends javax.swing.JFrame implements controller.Obser
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        NewJFrame11 admin = new NewJFrame11(user, users, hospitalizations, appointments);
+        NewJFrame11 admin = new NewJFrame11(user, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
         this.setVisible(false);
         admin.setVisible(true);
     }//GEN-LAST:event_jButton11ActionPerformed

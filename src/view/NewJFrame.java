@@ -429,7 +429,7 @@ public class NewJFrame extends javax.swing.JFrame {
         } else if (selectedUser instanceof Doctor) {
             DoctorController dc = new DoctorController();
             DoctorDTO doctorDTO = dc.getDoctorDTO(selectedUser.getId());
-            NewJFrame111 doctor = new NewJFrame111(selectedUser, doctorDTO, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
+            NewJFrame111 doctor = new NewJFrame111(selectedUser, doctorDTO);
             this.setVisible(false);
             doctor.setVisible(true);
         } else {

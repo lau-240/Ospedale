@@ -475,7 +475,7 @@ public class NewJFrame11 extends javax.swing.JFrame {
             return;
         }
         DoctorDTO doctorDTO = doctorController.getDoctorDTO(idDoctor);
-        NewJFrame111 doctor = new NewJFrame111(user, doctorDTO, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
+        NewJFrame111 doctor = new NewJFrame111(user, doctorDTO);
         this.setVisible(false);
         doctor.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
