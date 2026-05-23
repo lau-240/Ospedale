@@ -99,13 +99,24 @@ public class AppointmentController {
                 return new Response(409, "El doctor no tiene disponibilidad en ese horario");
             }
         } else {
-            try {
-                String specStr = specialtyStr.toUpperCase()
-                        .replaceAll(" & ", "_")
-                        .replaceAll("&", "_")
-                        .replaceAll(" ", "_");
-                specialty = Specialty.valueOf(specStr);
-            } catch (IllegalArgumentException e) {
+            switch (specialtyStr) {
+                case "General Medicine":
+                    specialty = Specialty.GENERAL_MEDICINE;
+                    break;
+                case "Internal Medicine":
+                    specialty = Specialty.INTERNAL_MEDICINE;
+                    break;
+                case "Traumatology & Orthopedics":
+                    specialty = Specialty.TRAUMATOLOGY_ORTHOPEDICS;
+                    break;
+                case "Gynecology & Obstetrics":
+                    specialty = Specialty.GYNECOLOGY_OBSTETRICS;
+                    break;
+                default:
+                    specialty = Specialty.valueOf(specialtyStr.toUpperCase().replaceAll(" ", "_"));
+                    break;
+            }
+            if (specialty == null) {
                 return new Response(400, "Especialidad no válida");
             }
             for (User u : dataStore.getUsers()) {

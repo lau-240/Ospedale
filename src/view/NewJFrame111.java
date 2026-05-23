@@ -54,13 +54,6 @@ public class NewJFrame111 extends javax.swing.JFrame {
         jTextField2.setText(doctor.getFirstname());
         jTextField6.setText(doctor.getLastname());
 
-// Cargar especialidades
-        jComboBox1.addItem("Select one");
-        for (Specialty spec : Specialty.values()) {
-            jComboBox1.addItem(spec.toString().replaceAll("_", " "));
-        }
-
-
         // Cargar hospitalizaciones en comboboxes
         jComboBox6.addItem("Select one");
         jComboBox8.addItem("Select one");
@@ -71,7 +64,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
             }
         }
 
-// Cargar pacientes en jComboBox5
+        // Cargar pacientes en jComboBox5
         jComboBox5.addItem("Select one");
         for (User u : DataStore.getInstance().getUsers()) {
             if (u instanceof Patient) {
@@ -1318,28 +1311,46 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        String appointmentId = jComboBox7.getItemAt(jComboBox7.getSelectedIndex());
-        try {
-            double dose = Double.parseDouble(jTextField25.getText());
-            int duration = Integer.parseInt(jTextField28.getText());
-            int frecuency = Integer.parseInt(jTextField27.getText());
-            Response response = appointmentController.prescribeMedication(
-                    appointmentId, jTextField24.getText(), dose,
-                    jTextField26.getText(), duration, jTextField29.getText(), frecuency
-            );
-            if (response.isSuccess()) {
-                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                jTextField24.setText("");
-                jTextField25.setText("");
-                jTextField26.setText("");
-                jTextField27.setText("");
-                jTextField28.setText("");
-                jTextField29.setText("");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        boolean hasData = false;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (model.getValueAt(i, 0) != null) {
+                hasData = true;
+                break;
             }
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Dosis, duración y frecuencia deben ser números", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
+        if (!hasData) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Agregue al menos un medicamento", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        boolean allSuccess = true;
+        for (int i = 0; i < model.getRowCount(); i++) {
+            if (model.getValueAt(i, 0) == null) {
+                continue;
+            }
+            try {
+                String appointmentId = model.getValueAt(i, 0).toString().trim();
+                String medicationName = model.getValueAt(i, 1).toString().trim();
+                double dose = Double.parseDouble(model.getValueAt(i, 2).toString().trim());
+                String adminRoute = model.getValueAt(i, 3).toString().trim();
+                int duration = Integer.parseInt(model.getValueAt(i, 4).toString().trim());
+                String instructions = model.getValueAt(i, 5) != null ? model.getValueAt(i, 5).toString().trim() : "";
+                int frecuency = Integer.parseInt(model.getValueAt(i, 6).toString().trim());
+                Response response = appointmentController.prescribeMedication(
+                        appointmentId, medicationName, dose, adminRoute, duration, instructions, frecuency
+                );
+                if (!response.isSuccess()) {
+                    javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    allSuccess = false;
+                }
+            } catch (NumberFormatException e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Dosis, duración y frecuencia deben ser números", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        if (allSuccess) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Medicamentos prescritos exitosamente", "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            model.setRowCount(0);
         }
 
     }//GEN-LAST:event_jButton10ActionPerformed
@@ -1347,28 +1358,29 @@ public class NewJFrame111 extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         String appointmentId = jComboBox7.getItemAt(jComboBox7.getSelectedIndex());
-        try {
-            double dose = Double.parseDouble(jTextField25.getText());
-            int duration = Integer.parseInt(jTextField28.getText());
-            int frecuency = Integer.parseInt(jTextField27.getText());
-            Response response = appointmentController.prescribeMedication(
-                    appointmentId, jTextField24.getText(), dose,
-                    jTextField26.getText(), duration, jTextField29.getText(), frecuency
-            );
-            if (response.isSuccess()) {
-                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                jTextField24.setText("");
-                jTextField25.setText("");
-                jTextField26.setText("");
-                jTextField27.setText("");
-                jTextField28.setText("");
-                jTextField29.setText("");
-            } else {
-                javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
-        } catch (NumberFormatException e) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Dosis, duración y frecuencia deben ser números", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        if (appointmentId == null || appointmentId.equals("Select one")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una cita", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
         }
+        if (jTextField24.getText().isBlank() || jTextField25.getText().isBlank()
+                || jTextField26.getText().isBlank() || jTextField27.getText().isBlank()
+                || jTextField28.getText().isBlank()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Complete todos los campos", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.addRow(new Object[]{
+            appointmentId, jTextField24.getText(), jTextField25.getText(),
+            jTextField26.getText(), jTextField28.getText(),
+            jTextField29.getText(), jTextField27.getText()
+        });
+        jTextField24.setText("");
+        jTextField25.setText("");
+        jTextField26.setText("");
+        jTextField27.setText("");
+        jTextField28.setText("");
+        jTextField29.setText("");
+
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

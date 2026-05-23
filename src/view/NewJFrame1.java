@@ -862,7 +862,23 @@ public class NewJFrame1 extends javax.swing.JFrame {
 
         jComboBox5.addItem("Select one");
         for (Specialty spec : Specialty.values()) {
-            jComboBox5.addItem(spec.toString().replaceAll("_", " "));
+            switch (spec) {
+                case TRAUMATOLOGY_ORTHOPEDICS:
+                    jComboBox5.addItem("Traumatology & Orthopedics");
+                    break;
+                case GYNECOLOGY_OBSTETRICS:
+                    jComboBox5.addItem("Gynecology & Obstetrics");
+                    break;
+                case GENERAL_MEDICINE:
+                    jComboBox5.addItem("General Medicine");
+                    break;
+                case INTERNAL_MEDICINE:
+                    jComboBox5.addItem("Internal Medicine");
+                    break;
+                default:
+                    jComboBox5.addItem(spec.toString().charAt(0) + spec.toString().substring(1).toLowerCase());
+                    break;
+            }
         }
         jComboBox4.removeAllItems();
         jComboBox4.addItem("Select one");
