@@ -25,18 +25,16 @@ public class NewJFrame1 extends javax.swing.JFrame implements controller.Observe
     private HospitalizationController hospitalizationController;
     private PatientController patientController;
     private User user;
-    private ArrayList<User> users;
+    
     private Patient patient;
-    private ArrayList<Appointment> appointments;
-    private ArrayList<Hospitalization> hospitalizations;
+   
 
-    public NewJFrame1(User user, Patient patient, ArrayList<User> users, ArrayList<Appointment> appointments, ArrayList<Hospitalization> hospitalizations) {
+    public NewJFrame1(User user, Patient patient) {
         initComponents();
         this.user = user;
-        this.users = users;
+        
         this.patient = patient;
-        this.hospitalizations = hospitalizations;
-        this.appointments = appointments;
+        
         if (user instanceof Administrator) {
             jButton7.setVisible(true);
         } else {
@@ -854,7 +852,7 @@ public class NewJFrame1 extends javax.swing.JFrame implements controller.Observe
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        NewJFrame11 admin = new NewJFrame11(user, users, hospitalizations, appointments);
+        NewJFrame11 admin = new NewJFrame11(user, DataStore.getInstance().getUsers(), DataStore.getInstance().getHospitalizations(), DataStore.getInstance().getAppointments());
         this.setVisible(false);
         admin.setVisible(true);
     }//GEN-LAST:event_jButton7ActionPerformed
@@ -900,7 +898,7 @@ public class NewJFrame1 extends javax.swing.JFrame implements controller.Observe
         jComboBox5.removeAllItems();
 
         jComboBox5.addItem("Select one");
-        for (User doc : this.users) {
+        for (User doc : DataStore.getInstance().getUsers()) {
             if (doc instanceof Doctor) {
                 jComboBox5.addItem(String.valueOf(doc.getId()));
             }

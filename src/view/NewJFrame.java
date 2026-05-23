@@ -433,7 +433,7 @@ public class NewJFrame extends javax.swing.JFrame {
             this.setVisible(false);
             doctor.setVisible(true);
         } else {
-            NewJFrame1 patient = new NewJFrame1(selectedUser, (Patient) selectedUser, DataStore.getInstance().getUsers(), DataStore.getInstance().getAppointments(), DataStore.getInstance().getHospitalizations());
+            NewJFrame1 patient = new NewJFrame1(selectedUser, (Patient) selectedUser);
             jTextField1.setText("");
             jTextField2.setText("");
             this.setVisible(false);

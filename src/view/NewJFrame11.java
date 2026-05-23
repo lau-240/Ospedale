@@ -499,7 +499,7 @@ public class NewJFrame11 extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Paciente no encontrado", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
-        NewJFrame1 patient = new NewJFrame1(user, (Patient) temp, DataStore.getInstance().getUsers(), DataStore.getInstance().getAppointments(), DataStore.getInstance().getHospitalizations());
+        NewJFrame1 patient = new NewJFrame1(user, (Patient) temp);
         this.setVisible(false);
         patient.setVisible(true);
     }//GEN-LAST:event_jButton3ActionPerformed
