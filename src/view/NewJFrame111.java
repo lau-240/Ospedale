@@ -55,10 +55,10 @@ public class NewJFrame111 extends javax.swing.JFrame {
         this.doctorController = new DoctorController();
 
         // Cargar info del doctor
-        jTextField1.setText(doctor.getUsername());
-        jTextField2.setText(doctor.getFirstname());
-        jTextField6.setText(doctor.getLastname());
-        jTextField7.setText(doctor.getLicenceNumber());
+        jTextField1.setText(doctor.getFirstname());
+        jTextField2.setText(doctor.getLastname());
+        jTextField6.setText(doctor.getLicenceNumber());
+        jTextField7.setText(doctor.getUsername());
         jTextField8.setText(doctor.getAssignedOffice());
 
         // Cargar hospitalizaciones en comboboxes
@@ -1186,13 +1186,18 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         Response response = doctorController.updateDoctor(
-                String.valueOf(doctor.getId()), jTextField1.getText(), jTextField2.getText(),
-                jTextField6.getText(), jTextField8.getText(), jTextField9.getText(),
-                jComboBox1.getSelectedItem().toString(), jTextField7.getText(), jTextField10.getText()
+                String.valueOf(doctor.getId()),
+                jTextField7.getText(), // username
+                jTextField1.getText(), // firstname
+                jTextField2.getText(), // lastname
+                jTextField9.getText(), // password
+                jTextField10.getText(), // confirmPassword
+                jComboBox1.getSelectedItem().toString(), // specialty
+                jTextField6.getText(), // licenceNumber
+                jTextField8.getText() // assignedOffice
         );
         if (response.isSuccess()) {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            jTextField8.setText("");
             jTextField9.setText("");
             jTextField10.setText("");
         } else {
