@@ -56,7 +56,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
 
         // Cargar hospitalizaciones en comboboxes
         jComboBox6.addItem("Select one");
-        jComboBox8.addItem("Select one");
+        
         for (Hospitalization h : DataStore.getInstance().getHospitalizations()) {
             if (h.getDoctor().getId() == doctor.getId()) {
                 jComboBox6.addItem(h.getId());
@@ -71,13 +71,18 @@ public class NewJFrame111 extends javax.swing.JFrame {
                 jComboBox5.addItem(String.valueOf(u.getId()));
             }
         }
-        // Recargar jComboBox8 con RoomTypes para hospitalizar desde cita
+        // jComboBox8 inicia con hospitalizaciones para cancelar
         jComboBox8.removeAllItems();
         jComboBox8.addItem("Select one");
-        for (RoomType rt : RoomType.values()) {
-            jComboBox8.addItem(rt.name());
+        for (Hospitalization h : DataStore.getInstance().getHospitalizations()) {
+            if (h.getDoctor().getId() == doctor.getId()) {
+                jComboBox8.addItem(h.getId());
+            }
         }
+
         reloadAppointmentComboBoxes();
+        jRadioButton5.addActionListener(evt -> jRadioButton5ActionPerformed(evt));
+        jRadioButton6.addActionListener(evt -> jRadioButton6ActionPerformed(evt));
     }
 
     /**
@@ -1201,7 +1206,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        String hospitalizationId = jComboBox8.getItemAt(jComboBox8.getSelectedIndex());
+        String hospitalizationId = jComboBox6.getItemAt(jComboBox6.getSelectedIndex());
         if (hospitalizationId == null || hospitalizationId.equals("Select one")) {
             javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una hospitalización", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
@@ -1362,12 +1367,6 @@ public class NewJFrame111 extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(this, "Seleccione una cita", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
-        if (jTextField24.getText().isBlank() || jTextField25.getText().isBlank()
-                || jTextField26.getText().isBlank() || jTextField27.getText().isBlank()
-                || jTextField28.getText().isBlank()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Complete todos los campos", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            return;
-        }
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.addRow(new Object[]{
             appointmentId, jTextField24.getText(), jTextField25.getText(),
@@ -1380,6 +1379,7 @@ public class NewJFrame111 extends javax.swing.JFrame {
         jTextField27.setText("");
         jTextField28.setText("");
         jTextField29.setText("");
+
 
     }//GEN-LAST:event_jButton7ActionPerformed
 
@@ -1406,15 +1406,33 @@ public class NewJFrame111 extends javax.swing.JFrame {
         jComboBox3.addItem("Select one");
         jComboBox4.addItem("Select one");
         jComboBox7.addItem("Select one");
-        
+
         for (Appointment a : DataStore.getInstance().getAppointments()) {
-            
+
             if (a.getDoctor().getId() == doctor.getId()) {
                 jComboBox2.addItem(a.getId());
                 jComboBox3.addItem(a.getId());
                 jComboBox4.addItem(a.getId());
                 jComboBox7.addItem(a.getId());
             }
+        }
+    }
+
+    private void jRadioButton5ActionPerformed(java.awt.event.ActionEvent evt) {
+        jComboBox8.removeAllItems();
+        jComboBox8.addItem("Select one");
+        for (Hospitalization h : DataStore.getInstance().getHospitalizations()) {
+            if (h.getDoctor().getId() == doctor.getId()) {
+                jComboBox8.addItem(h.getId());
+            }
+        }
+    }
+
+    private void jRadioButton6ActionPerformed(java.awt.event.ActionEvent evt) {
+        jComboBox8.removeAllItems();
+        jComboBox8.addItem("Select one");
+        for (RoomType rt : RoomType.values()) {
+            jComboBox8.addItem(rt.name());
         }
     }
 
