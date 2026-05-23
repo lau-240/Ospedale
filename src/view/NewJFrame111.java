@@ -58,6 +58,8 @@ public class NewJFrame111 extends javax.swing.JFrame {
         jTextField1.setText(doctor.getUsername());
         jTextField2.setText(doctor.getFirstname());
         jTextField6.setText(doctor.getLastname());
+        jTextField7.setText(doctor.getLicenceNumber());
+        jTextField8.setText(doctor.getAssignedOffice());
 
         // Cargar hospitalizaciones en comboboxes
         jComboBox6.addItem("Select one");

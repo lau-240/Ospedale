@@ -55,4 +55,10 @@ public class Doctor extends User {
     public void addAppointment(Appointment a) {
         this.appointments.add(a);
     }
+    public String getLicenceNumber(){
+        return licenceNumber;
+    }
+    public String getAssignedOffice(){
+        return assignedOffice;
+    }
 }
