@@ -25,16 +25,15 @@ public class NewJFrame1 extends javax.swing.JFrame implements controller.Observe
     private HospitalizationController hospitalizationController;
     private PatientController patientController;
     private User user;
-    
+
     private Patient patient;
-   
 
     public NewJFrame1(User user, Patient patient) {
         initComponents();
         this.user = user;
-        
+
         this.patient = patient;
-        
+
         if (user instanceof Administrator) {
             jButton7.setVisible(true);
         } else {
@@ -817,6 +816,15 @@ public class NewJFrame1 extends javax.swing.JFrame implements controller.Observe
         Response response = appointmentController.cancelAppointment(appointmentId);
         if (response.isSuccess()) {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Éxito", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            jComboBox4.removeAllItems();
+            jComboBox4.addItem("Select one");
+            for (Appointment a : patient.getAppointments()) {
+                if (a.getStatus() != AppointmentStatus.CANCELED) {
+                    jComboBox4.addItem(a.getId());
+                }
+            }
+            // Actualizar tabla también
+            jButton6ActionPerformed(null);
         } else {
             javax.swing.JOptionPane.showMessageDialog(this, response.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         }
@@ -985,7 +993,9 @@ public class NewJFrame1 extends javax.swing.JFrame implements controller.Observe
             jComboBox4.removeAllItems();
             jComboBox4.addItem("Select one");
             for (Appointment a : patient.getAppointments()) {
-                jComboBox4.addItem(a.getId());
+                if (a.getStatus() != AppointmentStatus.CANCELED) {
+                    jComboBox4.addItem(a.getId());
+                }
             }
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             model.setRowCount(0);
